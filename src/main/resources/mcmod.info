@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ferretshinies",
+  "name": "Ferret Shinies",
+  "description": "Various Adventure and HQM assets made primarily for The Ferret Business",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Caigan"],
+  "credits": "The Forge and FML guys, for making this example",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
