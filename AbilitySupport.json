@@ -2147,58 +2147,58 @@
 	"fear|9,0.6D,net.minecraft.entity.passive.EntityVillager",
     "sunburn"
   ],
-  "ProjectZulu|Core.Beaver": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityBeaver": [
 	"swim|false,1.8F,0.6F,true"
   ],
-  "ProjectZulu|Core.BeetleAS": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityBeetleAS": [
 	"climb"
   ],
-  "ProjectZulu|Core.Blue_Finch": [
-	"fly|true"
-  ],
-  "ProjectZulu|Core.Centipede": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityBeetleBS": [
 	"climb"
   ],
-  "ProjectZulu|Core.Crow": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityRedFinch": [
 	"fly|true"
   ],
-  "ProjectZulu|Core.Duck": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityGreenFinch": [
+	"fly|true"
+  ],
+  "com.stek101.projectzulu.common.mobs.entity.EntityBlueFinch": [
+	"fly|true"
+  ],
+  "com.stek101.projectzulu.common.mobs.entity.EntityCentipede": [
+	"climb"
+  ],
+  "com.stek101.projectzulu.common.mobs.entity.EntityDuck": [
 	"float|-0.114,true"
   ],
-  "ProjectZulu|Core.Eagle": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityEagle": [
 	"fly|true"
   ],
-  "ProjectZulu|Core.Frog": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityFrog": [
 	"swim|false,1.8F,0.6F,true"
   ],
-  "ProjectZulu|Green_Finch": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityCrow": [
 	"fly|true"
   ],
-  "ProjectZulu|Core.Crow": [
-	"fly|true"
-  ],
-  "ProjectZulu|Ostrich": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityOstrich": [
 	"float|-0.114,true"
   ],
-  "ProjectZulu|Pelican": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityPelican": [
 	"fly|true"
   ],
-  "ProjectZulu|Penguin": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityPenguin": [
 	"swim|false,1.8F,0.6F,true"
   ],
-  "ProjectZulu|PZBat": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityPZBat": [
 	"fly|true"
   ],
-  "ProjectZulu|Red_Finch": [
-	"fly|true"
-  ],
-  "ProjectZulu|Skeletonn": [
+  "com.stek101.projectzulu.common.mobs.entity.EntitySkeletonn": [
 	"sunburn"
   ],
-  "ProjectZulu|Vulture": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityVulture": [
 	"fly|true"
   ],
-  "ProjectZulu|Yellow_Finch": [
+  "com.stek101.projectzulu.common.mobs.entity.EntityYellowFinch": [
 	"fly|true"
   ]
 }
