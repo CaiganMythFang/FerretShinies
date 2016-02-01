@@ -4,6 +4,7 @@ import net.minecraft.item.Item;
 
 import com.wolfretbusiness.ferretshinies.items.BlindBag;
 import com.wolfretbusiness.ferretshinies.items.IconAsset;
+import com.wolfretbusiness.ferretshinies.items.LayeredIconAsset;
 import com.wolfretbusiness.ferretshinies.items.NullToken;
 
 public final class FerretShinyItems {
