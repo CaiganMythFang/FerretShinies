@@ -3,8 +3,10 @@ package com.wolfretbusiness.ferretshinies.items;
 import static com.wolfretbusiness.ferretshinies.utilities.CommonUtilities.camelCaseToTitle;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -104,19 +106,34 @@ public class LayeredIconAsset extends Item {
 	}
 
 	private void extractIdentifiers() {
+		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + "LayeredIconAsset.cfg";
+		
 		if (subItemNames.isEmpty()) {
-			final InputStream in = this.getClass().getResourceAsStream(FerretShinies.getClassConfigurationFile(this.getClass()));
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			FileInputStream in;
 			try {
-				while (reader.ready()) {
-					final String subItemName = reader.readLine();
-					if (!subItemName.startsWith("#")) {
-						subItemNames.add(subItemName);
+				in = new FileInputStream(iconListPath);
+				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+				
+				try {
+					while (reader.ready()) {
+						final String subIconRow = reader.readLine();
+						if (!subIconRow.startsWith("#")) {
+							String[] subItemFields = subIconRow.split(":");
+							subItemNames.add(subItemFields[0]);
+							final List<String> layeredIcons = new ArrayList<String>();
+							String[] subItemIcons = subItemFields[1].split(",");
+							for (String icon : subItemIcons) {
+								layeredIcons.add(icon);
+							}
+							iconNamesByItem.put(subIconRow, layeredIcons);
+						}
 					}
+					reader.close();
+				} catch (final IOException e) {
+					e.printStackTrace();
 				}
-				reader.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				throw new IllegalStateException("LayeredIconAsset.cfg configuration file was not present: " + iconListPath);
 			}
 		}
 	}
