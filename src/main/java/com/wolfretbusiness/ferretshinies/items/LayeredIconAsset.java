@@ -109,9 +109,8 @@ public class LayeredIconAsset extends Item {
 		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + "LayeredIconAsset.cfg";
 		
 		if (subItemNames.isEmpty()) {
-			FileInputStream in;
 			try {
-				in = new FileInputStream(iconListPath);
+				final FileInputStream in = new FileInputStream(iconListPath);
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 				
 				try {
@@ -119,13 +118,14 @@ public class LayeredIconAsset extends Item {
 						final String subIconRow = reader.readLine();
 						if (!subIconRow.startsWith("#")) {
 							String[] subItemFields = subIconRow.split(":");
-							subItemNames.add(subItemFields[0]);
+							String subIconName = subItemFields[0];
+							subItemNames.add(subIconName);
 							final List<String> layeredIcons = new ArrayList<String>();
 							String[] subItemIcons = subItemFields[1].split(",");
 							for (String icon : subItemIcons) {
 								layeredIcons.add(icon);
 							}
-							iconNamesByItem.put(subIconRow, layeredIcons);
+							iconNamesByItem.put(subIconName, layeredIcons);
 						}
 					}
 					reader.close();
