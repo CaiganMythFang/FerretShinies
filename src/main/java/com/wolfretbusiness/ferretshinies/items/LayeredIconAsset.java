@@ -35,7 +35,7 @@ public class LayeredIconAsset extends BaseItem {
   public LayeredIconAsset() {
 		super("LayeredIconAsset");
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.name);
+		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
 		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
@@ -69,15 +69,15 @@ public class LayeredIconAsset extends BaseItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getRenderPasses(final int damage) {
-		final String itemName = SUB_ITEM_NAMES.get(damage);
-		return ICON_NAMES_BY_ICON.get(itemName).size();
+		final String itemName = subItemNames.get(damage);
+		return iconNamesByItem.get(itemName).size();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(final Item item, final CreativeTabs tabs, final List list) {
-		for (int subItem = 0; subItem < SUB_ITEM_NAMES.size(); ++subItem) {
+		for (int subItem = 0; subItem < subItemNames.size(); ++subItem) {
 			list.add(new ItemStack(item, 1, subItem));
 		}
 	}
@@ -95,13 +95,13 @@ public class LayeredIconAsset extends BaseItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(final IIconRegister iconRegister) {
-		ICONS_BY_ICON_NAME.clear();
-		for (final String subItemName : SUB_ITEM_NAMES) {
-			final List<String> iconNames = ICON_NAMES_BY_ICON.get(subItemName);
+		iconsByIconName.clear();
+		for (final String subItemName : subItemNames) {
+			final List<String> iconNames = iconNamesByItem.get(subItemName);
 
 			for (final String iconName : iconNames) {
 				final IIcon icon = iconRegister.registerIcon(FerretShinies.MODID + ":" + iconName);
-				ICONS_BY_ICON_NAME.put(iconName, icon);
+				iconsByIconName.put(iconName, icon);
 			}
 		}
 	}
@@ -113,10 +113,9 @@ public class LayeredIconAsset extends BaseItem {
 	}
 
 	private void extractIdentifiers() {
-		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + name + ".cfg";
-		System.out.println("FERRETDEBUG: Looking for (file) " + iconListPath + ", (name) " + name);
+		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + internalName + ".cfg";
 		
-		if (SUB_ITEM_NAMES.isEmpty()) {
+		if (subItemNames.isEmpty()) {
 			try {
 				final FileInputStream in = new FileInputStream(iconListPath);
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -127,13 +126,13 @@ public class LayeredIconAsset extends BaseItem {
 						if (!subIconRow.startsWith("#")) {
 							String[] subItemFields = subIconRow.split(":");
 							String subIconName = subItemFields[0];
-							SUB_ITEM_NAMES.add(subIconName);
+							subItemNames.add(subIconName);
 							final List<String> layeredIcons = new ArrayList<String>();
 							String[] subItemIcons = subItemFields[1].split(",");
 							for (String icon : subItemIcons) {
 								layeredIcons.add(icon);
 							}
-							ICON_NAMES_BY_ICON.put(subIconName, layeredIcons);
+							iconNamesByItem.put(subIconName, layeredIcons);
 						}
 					}
 					reader.close();
@@ -141,18 +140,18 @@ public class LayeredIconAsset extends BaseItem {
 					e.printStackTrace();
 				}
 			} catch (FileNotFoundException e1) {
-				throw new IllegalStateException(name + ".cfg configuration file was not present: " + iconListPath);
+				throw new IllegalStateException(internalName + ".cfg configuration file was not present: " + iconListPath);
 			}
 		}
 	}
 
 	private IIcon getIconFromDamageAndRenderPass(final int damage, final int renderPass) {
-		final String itemName = SUB_ITEM_NAMES.get(damage);
-		final String iconName = ICON_NAMES_BY_ICON.get(itemName).get(renderPass);
-		return ICONS_BY_ICON_NAME.get(iconName);
+		final String itemName = subItemNames.get(damage);
+		final String iconName = iconNamesByItem.get(itemName).get(renderPass);
+		return iconsByIconName.get(iconName);
 	}
 
 	private String getStackName(final ItemStack stack) {
-		return SUB_ITEM_NAMES.get(stack.getItemDamage());
+		return subItemNames.get(stack.getItemDamage());
 	}
 }
