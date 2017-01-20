@@ -12,11 +12,13 @@ public final class FerretShinyItems {
 	public static Item iconAssets;
 	public static Item layeredIconAssets;
 	public static Item blindBag;
+	public static Item contracts;
 
 	public static void init() {
 		nullToken = new NullToken();
 		iconAssets = new IconAsset();
-		layeredIconAssets = new LayeredIconAsset();
+		layeredIconAssets = new LayeredIconAsset("LayeredIconAsset");
 		blindBag = new BlindBag();
+		contracts = new LayeredIconAsset("Contracts");
 	}
 }

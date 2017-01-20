@@ -120,10 +120,9 @@ public class BlindBag extends Item {
 			if (!entityPlayer.capabilities.isCreativeMode && itemStack.stackSize == 0) {
 				entityPlayer.destroyCurrentEquippedItem();
 			}
-		} catch (final FileNotFoundException e1) {
+		} catch (final FileNotFoundException e) {
 			System.out.println("Blind bag " + bagName + " configuration file not found at " + bagContentFile);
 		}
-
 		return itemStack;
 	}
 
@@ -236,7 +235,7 @@ public class BlindBag extends Item {
 				currentBagContent = potentialBagContents.get(0);
 				itemFromBag = this.parseBagContentAndGetItemStack(entityPlayer, currentBagContent);
 				validBagFound = true;
-			} catch (final ArrayIndexOutOfBoundsException e) {
+			} catch (final ArrayIndexOutOfBoundsException|NullPointerException e) {
 				message += "Invalid blind bag contents: " + currentBagContent + "\n";
 				potentialBagContents.remove(0);
 			}
