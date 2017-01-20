@@ -7,16 +7,32 @@ import com.wolfretbusiness.ferretshinies.items.IconAsset;
 import com.wolfretbusiness.ferretshinies.items.LayeredIconAsset;
 import com.wolfretbusiness.ferretshinies.items.NullToken;
 
-public final class FerretShinyItems {
-	public static Item nullToken;
-	public static Item iconAssets;
-	public static Item layeredIconAssets;
-	public static Item blindBag;
+import cpw.mods.fml.common.registry.GameRegistry;
+
+public enum FerretShinyItems {
+	NULL_TOKEN(new NullToken()),
+	ICON_ASSET(new IconAsset()),
+	LAYERED_ICON_ASSET(new LayeredIconAsset()),
+	BLIND_BAG(new BlindBag());
+	
+	public final BaseItem item;
+	
+	FerretShinyItems(BaseItem item) {
+		this.item = item;
+	}
 
 	public static void init() {
-		nullToken = new NullToken();
-		iconAssets = new IconAsset();
-		layeredIconAssets = new LayeredIconAsset();
-		blindBag = new BlindBag();
+		for (FerretShinyItems ferretShinyItem : FerretShinyItems.values()) {
+			GameRegistry.registerItem(ferretShinyItem.item, ferretShinyItem.item.internalName);
+		}
+	}
+	
+	public static class BaseItem extends Item {
+		protected final String internalName;
+		
+		public BaseItem(String name) {			
+			super();
+			this.internalName = name;
+		}
 	}
 }

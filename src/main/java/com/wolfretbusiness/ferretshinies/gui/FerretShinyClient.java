@@ -20,7 +20,7 @@ public class FerretShinyClient implements CommonGuiProxy {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return FerretShinyItems.nullToken;
+			return FerretShinyItems.NULL_TOKEN.item;
 		}
 	};
 
@@ -46,7 +46,6 @@ public class FerretShinyClient implements CommonGuiProxy {
 	@Override
 	public void renderGUI() {
 		// Render GUI when on call from client
-		System.out.println("FerretShinyClient renderGui");
 	}
 
 	public static int registerGui(final Class<? extends GuiScreen> screenClass) {
