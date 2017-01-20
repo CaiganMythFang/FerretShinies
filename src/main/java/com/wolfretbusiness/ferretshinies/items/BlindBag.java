@@ -232,7 +232,10 @@ public class BlindBag extends BaseItem {
 				currentBagContent = potentialBagContents.get(0);
 				itemFromBag = this.parseBagContentAndGetItemStack(entityPlayer, currentBagContent);
 				validBagFound = true;
-			} catch (final ArrayIndexOutOfBoundsException | NullPointerException e) {
+			} catch (final ArrayIndexOutOfBoundsException e) {
+				message += "Invalid blind bag contents: " + currentBagContent + "\n";
+				potentialBagContents.remove(0);
+			} catch (final NullPointerException e) {
 				message += "Invalid blind bag contents: " + currentBagContent + "\n";
 				potentialBagContents.remove(0);
 			}
