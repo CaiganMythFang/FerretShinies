@@ -232,7 +232,7 @@ public class BlindBag extends BaseItem {
 				currentBagContent = potentialBagContents.get(0);
 				itemFromBag = this.parseBagContentAndGetItemStack(entityPlayer, currentBagContent);
 				validBagFound = true;
-			} catch (final ArrayIndexOutOfBoundsException e) {
+			} catch (final ArrayIndexOutOfBoundsException e | NullPointerException e) {
 				message += "Invalid blind bag contents: " + currentBagContent + "\n";
 				potentialBagContents.remove(0);
 			}
@@ -289,5 +289,4 @@ public class BlindBag extends BaseItem {
 			player.addChatMessage(new ChatComponentText("Error:  Invalid NBT JSON data: " + e.getMessage()));
 		}
 	}
-
 }
