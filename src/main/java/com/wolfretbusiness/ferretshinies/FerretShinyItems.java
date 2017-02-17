@@ -14,7 +14,7 @@ public enum FerretShinyItems {
 	ICON_ASSET(new IconAsset()),
 	LAYERED_ICON_ASSET(new LayeredIconAsset()),
 	BLIND_BAG(new BlindBag()),
-  CONTRACTS(new LayeredIconAsset("Contracts"));
+	CONTRACTS(new LayeredIconAsset("Contracts"));
 	
 	public final BaseItem item;
 	
