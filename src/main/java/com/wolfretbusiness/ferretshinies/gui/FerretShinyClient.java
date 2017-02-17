@@ -20,7 +20,7 @@ public class FerretShinyClient implements CommonGuiProxy {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Item getTabIconItem() {
-			return FerretShinyItems.nullToken;
+			return FerretShinyItems.NULL_TOKEN.item;
 		}
 	};
 
