@@ -16,32 +16,29 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import com.wolfretbusiness.ferretshinies.FerretShinies;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
 import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class IconAsset extends Item {
-	private final String name = "IconAsset";
-	private final static List<IIcon> itemIcons = new ArrayList<IIcon>();
-
-	private static final List<String> subItemNames = new ArrayList<String>();
+public class IconAsset extends BaseItem {
+	private static final List<IIcon> ITEM_ICONS = new ArrayList<IIcon>();
+	private static final List<String> SUB_ITEM_NAMES = new ArrayList<String>();
 
 	public IconAsset() {
-		super();
+		super("IconAsset");
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.name);
+		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
 		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		GameRegistry.registerItem(this, this.name);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(final int index) {
-		return itemIcons.get(index);
+		return ITEM_ICONS.get(index);
 	}
 
 	@Override
@@ -57,7 +54,7 @@ public class IconAsset extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(final Item item, final CreativeTabs tabs, final List list) {
-		for (int subItem = 0; subItem < subItemNames.size(); ++subItem) {
+		for (int subItem = 0; subItem < SUB_ITEM_NAMES.size(); ++subItem) {
 			list.add(new ItemStack(item, 1, subItem));
 		}
 	}
@@ -70,21 +67,21 @@ public class IconAsset extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(final IIconRegister iconRegister) {
-		itemIcons.clear();
-		for (final String subItemName : subItemNames) {
-			itemIcons.add(iconRegister.registerIcon(FerretShinies.MODID + ":" + subItemName));
+		ITEM_ICONS.clear();
+		for (final String subItemName : SUB_ITEM_NAMES) {
+			ITEM_ICONS.add(iconRegister.registerIcon(FerretShinies.MODID + ":" + subItemName));
 		}
 	}
 
 	private void extractIdentifiers() {
-		if (subItemNames.isEmpty()) {
+		if (SUB_ITEM_NAMES.isEmpty()) {
 			final InputStream in = this.getClass().getResourceAsStream(FerretShinies.getClassConfigurationFile(this.getClass()));
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
 				while (reader.ready()) {
 					final String subItemName = reader.readLine();
 					if (!subItemName.startsWith("#")) {
-						subItemNames.add(subItemName);
+						SUB_ITEM_NAMES.add(subItemName);
 					}
 				}
 				reader.close();
@@ -95,6 +92,6 @@ public class IconAsset extends Item {
 	}
 
 	private String getStackName(final ItemStack stack) {
-		return subItemNames.get(stack.getItemDamage());
+		return SUB_ITEM_NAMES.get(stack.getItemDamage());
 	}
 }

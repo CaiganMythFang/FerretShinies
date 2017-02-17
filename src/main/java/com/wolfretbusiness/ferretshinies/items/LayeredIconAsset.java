@@ -20,39 +20,34 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
 import com.wolfretbusiness.ferretshinies.FerretShinies;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
 import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class LayeredIconAsset extends Item {
-	private final String name;
+public class LayeredIconAsset extends BaseItem {
 
 	private final List<String> subItemNames = new ArrayList<String>();
 	private final Map<String, List<String>> iconNamesByItem = new HashMap<String, List<String>>();
 	private final Map<String, IIcon> iconsByIconName = new HashMap<String, IIcon>();
 
-	public LayeredIconAsset() {
-		super();
-		this.name = "LayeredIconAsset";
+  public LayeredIconAsset() {
+		super("LayeredIconAsset");
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.name);
+		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
 		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		GameRegistry.registerItem(this, this.name);
 	}
 	
 	public LayeredIconAsset(String name) {
-		super();
-		this.name = name;
+		super(name);
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.name);
+		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
 		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-		GameRegistry.registerItem(this, this.name);
 	}
 
 	@Override
@@ -118,8 +113,7 @@ public class LayeredIconAsset extends Item {
 	}
 
 	private void extractIdentifiers() {
-		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + name + ".cfg";
-		System.out.println("FERRETDEBUG: Looking for (file) " + iconListPath + ", (name) " + name);
+		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + internalName + ".cfg";
 		
 		if (subItemNames.isEmpty()) {
 			try {
@@ -146,7 +140,7 @@ public class LayeredIconAsset extends Item {
 					e.printStackTrace();
 				}
 			} catch (FileNotFoundException e1) {
-				throw new IllegalStateException(name + ".cfg configuration file was not present: " + iconListPath);
+				throw new IllegalStateException(internalName + ".cfg configuration file was not present: " + iconListPath);
 			}
 		}
 	}

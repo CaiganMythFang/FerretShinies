@@ -1,1 +1,2 @@
-gradlew.bat build
+cmd /k "gradlew.bat build"
+pause
