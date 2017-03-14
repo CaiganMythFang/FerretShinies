@@ -8,10 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.wolfretbusiness.ferretshinies.FerretShinies;
-import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.FerretShinyItem;
 import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
 
-public class NotebookPage extends BaseItem {
+public class NotebookPage extends FerretShinyItem {
 
 	public NotebookPage() {
 		super("notebookPage");

@@ -14,6 +14,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wolfretbusiness.ferretshinies.FerretShinies;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.FerretShinyItem;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
@@ -28,15 +34,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
-import com.wolfretbusiness.ferretshinies.FerretShinies;
-import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
-import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class BlindBag extends BaseItem {
+public class BlindBag extends FerretShinyItem {
 	private static final int BLIND_BAG_ITEM_LIST = 1;
 	private static final int BLIND_BAG_NAME = 0;
 	private static final List<String> SUB_ITEM_NAMES = new ArrayList<String>();
@@ -46,8 +44,6 @@ public class BlindBag extends BaseItem {
 	public BlindBag() {
 		super("BlindBag");
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
-		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setMaxStackSize(16);
@@ -232,7 +228,7 @@ public class BlindBag extends BaseItem {
 				currentBagContent = potentialBagContents.get(0);
 				itemFromBag = this.parseBagContentAndGetItemStack(entityPlayer, currentBagContent);
 				validBagFound = true;
-			} catch (NullPointerException|ArrayIndexOutOfBoundsException e) {
+			} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
 				message += "Invalid blind bag contents: " + currentBagContent + "\n";
 				potentialBagContents.remove(0);
 			}

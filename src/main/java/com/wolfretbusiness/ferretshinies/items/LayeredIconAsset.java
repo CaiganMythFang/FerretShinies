@@ -13,39 +13,33 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.wolfretbusiness.ferretshinies.FerretShinies;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.FerretShinyItem;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import com.wolfretbusiness.ferretshinies.FerretShinies;
-import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
-import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class LayeredIconAsset extends BaseItem {
+public class LayeredIconAsset extends FerretShinyItem {
 
 	private final List<String> subItemNames = new ArrayList<String>();
 	private final Map<String, List<String>> iconNamesByItem = new HashMap<String, List<String>>();
 	private final Map<String, IIcon> iconsByIconName = new HashMap<String, IIcon>();
 
-  public LayeredIconAsset() {
+	public LayeredIconAsset() {
 		super("LayeredIconAsset");
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
-		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
-	
+
 	public LayeredIconAsset(String name) {
 		super(name);
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
-		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
@@ -114,12 +108,12 @@ public class LayeredIconAsset extends BaseItem {
 
 	private void extractIdentifiers() {
 		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + internalName + ".cfg";
-		
+
 		if (subItemNames.isEmpty()) {
 			try {
 				final FileInputStream in = new FileInputStream(iconListPath);
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-				
+
 				try {
 					while (reader.ready()) {
 						final String subIconRow = reader.readLine();

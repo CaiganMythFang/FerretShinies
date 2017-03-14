@@ -9,28 +9,24 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wolfretbusiness.ferretshinies.FerretShinies;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.FerretShinyItem;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 
-import com.wolfretbusiness.ferretshinies.FerretShinies;
-import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
-import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-public class IconAsset extends BaseItem {
+public class IconAsset extends FerretShinyItem {
 	private static final List<IIcon> ITEM_ICONS = new ArrayList<IIcon>();
 	private static final List<String> SUB_ITEM_NAMES = new ArrayList<String>();
 
 	public IconAsset() {
 		super("IconAsset");
 		this.extractIdentifiers();
-		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
-		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
