@@ -1,15 +1,27 @@
 package com.wolfretbusiness.ferretshinies.blocks;
 
-import com.wolfretbusiness.ferretshinies.FerretShinyBlocks.FerretShinyBlock;
-import net.minecraft.block.material.Material;
+import com.wolfretbusiness.ferretshinies.FerretShinyMachines.FerretShinyMachine;
 
-public class ShippingMachine extends FerretShinyBlock {
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+
+public class ShippingMachine extends FerretShinyMachine {
 	public ShippingMachine() {
-		super("ShippingMachine", Material.iron, soundTypeMetal);
+		super("ShippingMachine");
 		this.setHardness(2.0F);
-        this.setResistance(6.0F);
-        this.setLightLevel(1.0F);
+		this.setResistance(6.0F);
+		this.setLightLevel(1.0F);
 	}
 
+	@Override
+	public TileEntity createNewTileEntity(World arg0, int arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public Class<? extends TileEntity> getTileEntityClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

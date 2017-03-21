@@ -34,7 +34,8 @@ public class FerretShinies {
 	@Mod.EventHandler
 	public void init(final FMLInitializationEvent event) {
 		FerretShinyItems.init();
-		FerretShinyBlocks.init();
+		// FerretShinyBlocks.init();
+		FerretShinyMachines.init();
 	}
 
 	@Mod.EventHandler

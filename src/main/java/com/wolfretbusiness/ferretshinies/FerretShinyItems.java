@@ -30,12 +30,16 @@ public enum FerretShinyItems {
 		}
 	}
 
+	/*******************************************************************************/
+	/**************************** ITEM TYPE DEFINITIONS ****************************/
+	/*******************************************************************************/
+
 	// All Ferret Shiny items will...
 	// - Have an internal name consistent with their registered name
 	// - Have a consistent UnlocalizedName of the mod ID, an underscore, and the internal name
 	// - Be on the Ferret Shinies creative tab
 	// TODO: Examine common FerretShinyItem functionality that belongs here.
-	public static class FerretShinyItem extends Item {
+	public static abstract class FerretShinyItem extends Item {
 		protected final String internalName;
 
 		public FerretShinyItem(String name) {
