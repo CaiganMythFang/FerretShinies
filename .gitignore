@@ -2,3 +2,6 @@
 .project
 .metadata
 .settings
+/.gradle/
+/build/
+/bin/

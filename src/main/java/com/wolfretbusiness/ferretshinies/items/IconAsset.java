@@ -9,21 +9,19 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-
 import com.wolfretbusiness.ferretshinies.FerretShinies;
 import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
 import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class IconAsset extends BaseItem {
-	private static final List<IIcon> ITEM_ICONS = new ArrayList<IIcon>();
 	private static final List<String> SUB_ITEM_NAMES = new ArrayList<String>();
 
 	public IconAsset() {
@@ -33,12 +31,8 @@ public class IconAsset extends BaseItem {
 		this.setCreativeTab(FerretShinyClient.tabFerretShinies);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(final int index) {
-		return ITEM_ICONS.get(index);
+		Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this, 0,
+				new ModelResourceLocation(FerretShinies.MODID + ":" + this.internalName, "inventory"));
 	}
 
 	@Override
@@ -64,18 +58,10 @@ public class IconAsset extends BaseItem {
 		return "item." + FerretShinies.MODID + "_" + this.getStackName(stack);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(final IIconRegister iconRegister) {
-		ITEM_ICONS.clear();
-		for (final String subItemName : SUB_ITEM_NAMES) {
-			ITEM_ICONS.add(iconRegister.registerIcon(FerretShinies.MODID + ":" + subItemName));
-		}
-	}
-
 	private void extractIdentifiers() {
 		if (SUB_ITEM_NAMES.isEmpty()) {
-			final InputStream in = this.getClass().getResourceAsStream(FerretShinies.getClassConfigurationFile(this.getClass()));
+			final InputStream in = this.getClass()
+					.getResourceAsStream(FerretShinies.getClassConfigurationFile(this.getClass()));
 			final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			try {
 				while (reader.ready()) {

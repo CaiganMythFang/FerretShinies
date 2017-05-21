@@ -11,8 +11,8 @@ import net.minecraft.world.World;
 
 import com.wolfretbusiness.ferretshinies.FerretShinyItems;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class FerretShinyClient implements CommonGuiProxy {
 	public static final List<Class<? extends GuiScreen>> idToClassMap = new ArrayList<Class<? extends GuiScreen>>();

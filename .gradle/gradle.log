@@ -1,35 +1,49 @@
-The assetDir is deprecated!  I actually just did all this generalizing stuff just now.. Use runDir instead! runDir set to eclipse/assets/..The assetDir is deprecated!  I actually just did all this generalizing stuff just now.. Use runDir instead! runDir set to eclipse/assets/..
-
-The runDir should be the location where you want MC to be run, usually he parent of the asset dirThe runDir should be the location where you want MC to be run, usually he parent of the asset dir
-
-****************************
- Powered By MCP:             
- http://modcoderpack.com/    
- Searge, ProfMobius, Fesh0r, 
- R4wk, ZeuX, IngisKahn, bspkrs
- MCP Data version : unknown
-****************************
-:compileApiJava UP-TO-DATE
-:processApiResources UP-TO-DATE
-:apiClasses UP-TO-DATE
-:sourceMainJava UP-TO-DATE
-:compileJava UP-TO-DATE
-:processResources
-:classes
-:jar
-:compileTestJava UP-TO-DATE
-:processTestResources UP-TO-DATE
-:testClasses UP-TO-DATE
-:test UP-TO-DATE
-:extractMcpData UP-TO-DATE
+#################################################
+         ForgeGradle 2.2-SNAPSHOT-7a557d2        
+  https://github.com/MinecraftForge/ForgeGradle  
+#################################################
+               Powered by MCP unknown               
+             http://modcoderpack.com             
+         by: Searge, ProfMobius, Fesh0r,         
+         R4wk, ZeuX, IngisKahn, bspkrs           
+#################################################
+:clean
+:cleanEclipseClasspath
+:cleanEclipseJdt
+:cleanEclipseProject
+:cleanMakeEclipseCleanRunClient
+:cleanMakeEclipseCleanRunServer
+:cleanEclipse
+:deobfCompileDummyTask
+:deobfProvidedDummyTask
 :getVersionJson
-:extractUserDev UP-TO-DATE
-:genSrgs UP-TO-DATE
-:reobf
-:assemble
-:check UP-TO-DATE
-:build
+:extractUserdev UP-TO-DATE
+:extractDependencyATs SKIPPED
+:extractMcpData SKIPPED
+:extractMcpMappings SKIPPED
+:genSrgs SKIPPED
+:downloadClient SKIPPED
+:downloadServer SKIPPED
+:splitServerJar SKIPPED
+:mergeJars SKIPPED
+:deobfMcSRG SKIPPED
+:decompileMc SKIPPED
+:fixMcSources
+:applySourcePatches
+:remapMcSources SKIPPED
+:recompileMc SKIPPED
+:extractNatives SKIPPED
+:getAssetIndex UP-TO-DATE
+:getAssets
+:makeStart
+:setupDecompWorkspace
+:eclipseClasspath
+:eclipseJdt
+:eclipseProject
+:makeEclipseCleanRunClient
+:makeEclipseCleanRunServer
+:eclipse
 
 BUILD SUCCESSFUL
 
-Total time: 58.915 secs
+Total time: 31.292 secs

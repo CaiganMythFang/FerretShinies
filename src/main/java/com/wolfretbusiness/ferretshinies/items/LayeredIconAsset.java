@@ -9,30 +9,25 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 
 import com.wolfretbusiness.ferretshinies.FerretShinies;
 import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
 import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class LayeredIconAsset extends BaseItem {
 
 	private final List<String> subItemNames = new ArrayList<String>();
-	private final Map<String, List<String>> iconNamesByItem = new HashMap<String, List<String>>();
-	private final Map<String, IIcon> iconsByIconName = new HashMap<String, IIcon>();
 
-  public LayeredIconAsset() {
+	public LayeredIconAsset() {
 		super("LayeredIconAsset");
 		this.extractIdentifiers();
 		this.setUnlocalizedName(FerretShinies.MODID + "_" + this.internalName);
@@ -40,7 +35,7 @@ public class LayeredIconAsset extends BaseItem {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 	}
-	
+
 	public LayeredIconAsset(String name) {
 		super(name);
 		this.extractIdentifiers();
@@ -51,26 +46,12 @@ public class LayeredIconAsset extends BaseItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(final ItemStack stack, final int renderPass) {
-		final IIcon icon = this.getIconFromDamageAndRenderPass(stack.getItemDamage(), renderPass);
-		return icon;
-	}
-
-	@Override
 	public String getItemStackDisplayName(final ItemStack stack) {
 		String displayName = super.getItemStackDisplayName(stack);
 		if (displayName.contains(".name")) {
 			displayName = camelCaseToTitle(this.getStackName(stack));
 		}
 		return displayName;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getRenderPasses(final int damage) {
-		final String itemName = subItemNames.get(damage);
-		return iconNamesByItem.get(itemName).size();
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -92,47 +73,22 @@ public class LayeredIconAsset extends BaseItem {
 		return true;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(final IIconRegister iconRegister) {
-		iconsByIconName.clear();
-		for (final String subItemName : subItemNames) {
-			final List<String> iconNames = iconNamesByItem.get(subItemName);
-
-			for (final String iconName : iconNames) {
-				final IIcon icon = iconRegister.registerIcon(FerretShinies.MODID + ":" + iconName);
-				iconsByIconName.put(iconName, icon);
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
-	}
-
 	private void extractIdentifiers() {
 		final String iconListPath = FerretShinies.configDirectory + File.separatorChar + internalName + ".cfg";
-		
+
 		if (subItemNames.isEmpty()) {
 			try {
 				final FileInputStream in = new FileInputStream(iconListPath);
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-				
+
 				try {
 					while (reader.ready()) {
 						final String subIconRow = reader.readLine();
 						if (!subIconRow.startsWith("#")) {
 							String[] subItemFields = subIconRow.split(":");
-							String subIconName = subItemFields[0];
-							subItemNames.add(subIconName);
-							final List<String> layeredIcons = new ArrayList<String>();
-							String[] subItemIcons = subItemFields[1].split(",");
-							for (String icon : subItemIcons) {
-								layeredIcons.add(icon);
-							}
-							iconNamesByItem.put(subIconName, layeredIcons);
+							subItemNames.add(subItemFields[0]);
+							Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this,
+									subItemNames.size() - 1, new ModelResourceLocation(subItemFields[1], "inventory"));
 						}
 					}
 					reader.close();
@@ -140,15 +96,10 @@ public class LayeredIconAsset extends BaseItem {
 					e.printStackTrace();
 				}
 			} catch (FileNotFoundException e1) {
-				throw new IllegalStateException(internalName + ".cfg configuration file was not present: " + iconListPath);
+				throw new IllegalStateException(
+						internalName + ".cfg configuration file was not present: " + iconListPath);
 			}
 		}
-	}
-
-	private IIcon getIconFromDamageAndRenderPass(final int damage, final int renderPass) {
-		final String itemName = subItemNames.get(damage);
-		final String iconName = iconNamesByItem.get(itemName).get(renderPass);
-		return iconsByIconName.get(iconName);
 	}
 
 	private String getStackName(final ItemStack stack) {

@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import com.wolfretbusiness.ferretshinies.FerretShinies;
+import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
+import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,24 +27,24 @@ import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTException;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-
-import com.wolfretbusiness.ferretshinies.FerretShinies;
-import com.wolfretbusiness.ferretshinies.FerretShinyItems.BaseItem;
-import com.wolfretbusiness.ferretshinies.gui.FerretShinyClient;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlindBag extends BaseItem {
-	private static final int BLIND_BAG_ITEM_LIST = 1;
+	private static final int BLIND_BAG_MODEL_NAME = 1;
 	private static final int BLIND_BAG_NAME = 0;
-	private static final List<String> SUB_ITEM_NAMES = new ArrayList<String>();
-	private static final Map<String, List<String>> ICON_NAMES_BY_ICON = new HashMap<String, List<String>>();
-	private static final Map<String, IIcon> ICONS_BY_ICON_NAME = new HashMap<String, IIcon>();
+	private static final List<String> BLIND_BAG_NAMES = new ArrayList<String>();
+	// private static final Map<String, List<String>> ICON_NAMES_BY_ICON = new
+	// HashMap<String, List<String>>();
+	// private static final Map<String, IIcon> ICONS_BY_ICON_NAME = new
+	// HashMap<String, IIcon>();
 
 	public BlindBag() {
 		super("BlindBag");
@@ -51,13 +54,6 @@ public class BlindBag extends BaseItem {
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
 		this.setMaxStackSize(16);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(final ItemStack stack, final int renderPass) {
-		final IIcon icon = this.getIconFromDamageAndRenderPass(stack.getItemDamage(), renderPass);
-		return icon;
 	}
 
 	@Override
@@ -74,18 +70,11 @@ public class BlindBag extends BaseItem {
 		return 16;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public int getRenderPasses(final int damage) {
-		final String itemName = SUB_ITEM_NAMES.get(damage);
-		return ICON_NAMES_BY_ICON.get(itemName).size();
-	}
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(final Item item, final CreativeTabs tabs, final List list) {
-		for (int subItem = 0; subItem < SUB_ITEM_NAMES.size(); ++subItem) {
+		for (int subItem = 0; subItem < BLIND_BAG_NAMES.size(); ++subItem) {
 			list.add(new ItemStack(item, 1, subItem));
 		}
 	}
@@ -101,51 +90,34 @@ public class BlindBag extends BaseItem {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(final ItemStack itemStack, final World world, final EntityPlayer entityPlayer) {
-		final String bagName = SUB_ITEM_NAMES.get(itemStack.getItemDamage());
+	public EnumActionResult onItemUse(ItemStack itemStack, EntityPlayer playerIn, World worldIn, BlockPos pos,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		final String bagName = BLIND_BAG_NAMES.get(itemStack.getItemDamage());
 		final String bagContentFile = this.getBlindBagConfigDirectory() + bagName + ".cfg";
 		try {
-			if (!world.isRemote) {
+			if (!worldIn.isRemote) {
 				final List<String> potentialBagContents = this.getPotentialBagContents(bagContentFile);
-				this.giveRandomItemToPlayer(world, entityPlayer, itemStack, potentialBagContents);
-				entityPlayer.setItemInUse(itemStack, this.getMaxItemUseDuration(itemStack));
+				this.giveRandomItemToPlayer(worldIn, playerIn, itemStack, potentialBagContents);
 			}
 
 			--itemStack.stackSize;
 
-			if (!entityPlayer.capabilities.isCreativeMode && itemStack.stackSize == 0) {
-				entityPlayer.destroyCurrentEquippedItem();
-			}
+			// if (!playerIn.capabilities.isCreativeMode && itemStack.stackSize
+			// == 0) {
+			// playerIn.destroyCurrentEquippedItem();
+			// }
 		} catch (final FileNotFoundException e1) {
 			System.out.println("Blind bag " + bagName + " configuration file not found at " + bagContentFile);
 		}
 
-		return itemStack;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(final IIconRegister iconRegister) {
-		ICONS_BY_ICON_NAME.clear();
-		for (final String subItemName : SUB_ITEM_NAMES) {
-			final List<String> iconNames = ICON_NAMES_BY_ICON.get(subItemName);
-
-			for (final String iconName : iconNames) {
-				final IIcon icon = iconRegister.registerIcon(FerretShinies.MODID + ":" + iconName);
-				ICONS_BY_ICON_NAME.put(iconName, icon);
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public boolean requiresMultipleRenderPasses() {
-		return true;
+		super.onItemUse(itemStack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+		return EnumActionResult.SUCCESS;
 	}
 
 	private void extractIdentifiers() {
 		final String bagListPath = FerretShinies.configDirectory + File.separatorChar + "BlindBags.cfg";
-		if (SUB_ITEM_NAMES.isEmpty()) {
+
+		if (BLIND_BAG_NAMES.isEmpty()) {
 			try {
 				final FileInputStream in = new FileInputStream(bagListPath);
 				final BufferedReader reader = new BufferedReader(new InputStreamReader(in));
@@ -156,19 +128,18 @@ public class BlindBag extends BaseItem {
 						if (!blindBagRow.startsWith("#")) {
 							if (blindBagRow.contains(":")) {
 								final String[] blindBagFields = blindBagRow.split(":");
-								SUB_ITEM_NAMES.add(blindBagFields[BLIND_BAG_NAME]);
-
-								final String[] blindBagIconNames = blindBagFields[BLIND_BAG_ITEM_LIST].split(",");
-								final List<String> itemNameList = new ArrayList<String>();
-								for (final String name : blindBagIconNames) {
-									itemNameList.add(name);
-								}
-								ICON_NAMES_BY_ICON.put(blindBagFields[BLIND_BAG_NAME], itemNameList);
+								BLIND_BAG_NAMES.add(blindBagFields[BLIND_BAG_NAME]);
+								final String blindBagModelName = blindBagFields[BLIND_BAG_MODEL_NAME];
+								Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this,
+										BLIND_BAG_NAMES.size() - 1,
+										new ModelResourceLocation(blindBagModelName, "inventory"));
 							} else {
-								SUB_ITEM_NAMES.add(blindBagRow);
+								BLIND_BAG_NAMES.add(blindBagRow);
 								final List<String> blindBagIcons = new ArrayList<String>();
 								blindBagIcons.add(blindBagRow);
-								ICON_NAMES_BY_ICON.put(blindBagRow, blindBagIcons);
+								Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(this,
+										BLIND_BAG_NAMES.size() - 1,
+										new ModelResourceLocation(blindBagRow, "inventory"));
 							}
 						}
 					}
@@ -184,12 +155,6 @@ public class BlindBag extends BaseItem {
 
 	private String getBlindBagConfigDirectory() {
 		return FerretShinies.configDirectory + File.separatorChar + "blindbags" + File.separatorChar;
-	}
-
-	private IIcon getIconFromDamageAndRenderPass(final int damage, final int renderPass) {
-		final String itemName = SUB_ITEM_NAMES.get(damage);
-		final String iconName = ICON_NAMES_BY_ICON.get(itemName).get(renderPass);
-		return ICONS_BY_ICON_NAME.get(iconName);
 	}
 
 	private List<String> getPotentialBagContents(final String bagContentFile) throws FileNotFoundException {
@@ -212,10 +177,11 @@ public class BlindBag extends BaseItem {
 	}
 
 	private String getStackName(final ItemStack stack) {
-		return SUB_ITEM_NAMES.get(stack.getItemDamage());
+		return BLIND_BAG_NAMES.get(stack.getItemDamage());
 	}
 
-	private void giveRandomItemToPlayer(final World world, final EntityPlayer entityPlayer, final ItemStack bag, final List<String> potentialBagContents) {
+	private void giveRandomItemToPlayer(final World world, final EntityPlayer entityPlayer, final ItemStack bag,
+			final List<String> potentialBagContents) {
 		final String bagName = bag.getDisplayName();
 		String currentBagContent = "";
 		String message = "";
@@ -224,34 +190,36 @@ public class BlindBag extends BaseItem {
 
 		Collections.shuffle(potentialBagContents);
 
-		// TODO Erdenshire 2015-02-18 Parse when the file is loaded, not when
-		// giving the item to a player.
 		boolean validBagFound = false;
 		while (potentialBagContents.size() > 0 && !validBagFound) {
 			try {
 				currentBagContent = potentialBagContents.get(0);
 				itemFromBag = this.parseBagContentAndGetItemStack(entityPlayer, currentBagContent);
 				validBagFound = true;
-			} catch (NullPointerException|ArrayIndexOutOfBoundsException e) {
+			} catch (NullPointerException | ArrayIndexOutOfBoundsException e) {
 				message += "Invalid blind bag contents: " + currentBagContent + "\n";
 				potentialBagContents.remove(0);
 			}
 		}
 
 		if (!message.isEmpty()) {
-			message = message + "Uh oh, this " + bagName + " seems to be defective. Better report it to the company! (Please report this to Caigan on the FTB Forums or his Player.me)\n";
+			message = message + "Uh oh, this " + bagName
+					+ " seems to be defective. Better report it to the company! (Please report this to Caigan on the FTB Forums or his Player.me)\n";
 		}
-		message += "You opened " + (bagName.startsWith("A") ? "an " : "a ") + bagName + " and got " + itemFromBag.stackSize + " x [" + itemFromBag.getDisplayName() + "]!";
+		message += "You opened " + (bagName.startsWith("A") ? "an " : "a ") + bagName + " and got "
+				+ itemFromBag.stackSize + " x [" + itemFromBag.getDisplayName() + "]!";
 
 		final String announcements[] = message.split("\n");
 		for (final String announcement : announcements) {
-			entityPlayer.addChatMessage(new ChatComponentText(announcement));
+			entityPlayer.addChatMessage(new TextComponentString(announcement));
 		}
 
-		world.spawnEntityInWorld(new EntityItem(world, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, itemFromBag));
+		world.spawnEntityInWorld(
+				new EntityItem(world, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, itemFromBag));
 	}
 
-	private ItemStack parseBagContentAndGetItemStack(final EntityPlayer entityPlayer, final String currentBagContent) throws ArrayIndexOutOfBoundsException {
+	private ItemStack parseBagContentAndGetItemStack(final EntityPlayer entityPlayer, final String currentBagContent)
+			throws ArrayIndexOutOfBoundsException {
 		ItemStack itemFromBag;
 		final String[] parts = currentBagContent.split(":");
 		final String modId = parts[0];
@@ -279,14 +247,14 @@ public class BlindBag extends BaseItem {
 	private void addNBTToStack(final String nbtString, final ItemStack stack, final EntityPlayer player) {
 		NBTBase base;
 		try {
-			base = JsonToNBT.func_150315_a(nbtString);
+			base = JsonToNBT.getTagFromJson(nbtString);
 			if (base instanceof NBTTagCompound) {
 				stack.setTagCompound((NBTTagCompound) base);
 			} else {
-				player.addChatMessage(new ChatComponentText("Error:  Invalid NBT type provided in JSON."));
+				player.addChatMessage(new TextComponentString("Error:  Invalid NBT type provided in JSON."));
 			}
 		} catch (final NBTException e) {
-			player.addChatMessage(new ChatComponentText("Error:  Invalid NBT JSON data: " + e.getMessage()));
+			player.addChatMessage(new TextComponentString("Error:  Invalid NBT JSON data: " + e.getMessage()));
 		}
 	}
 }

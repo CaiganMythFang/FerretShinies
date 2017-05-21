@@ -7,7 +7,7 @@ import com.wolfretbusiness.ferretshinies.items.IconAsset;
 import com.wolfretbusiness.ferretshinies.items.LayeredIconAsset;
 import com.wolfretbusiness.ferretshinies.items.NullToken;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public enum FerretShinyItems {
 	NULL_TOKEN(new NullToken()),

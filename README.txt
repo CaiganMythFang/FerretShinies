@@ -1,66 +1,59 @@
 -------------------------------------------
-FERRET SHINIES
+Source installation information for modders
 -------------------------------------------
+This code follows the Minecraft Forge installation methodology. It will apply
+some small patches to the vanilla MCP source code, giving you and it access 
+to some of the data and functions you need to build a successful mod.
 
-This is the github for the Ferret Shinies mod, used primarily by The Ferret Business, a Minecraft Modpack. The modpack provides Blind Bags and items, but does not provide crafting recipes or ways to obtain said items, as the mod is intended for Modpack Makers.
+Note also that the patches are built against "unrenamed" MCP source code (aka
+srgnames) - this means that you will not be able to read them directly against
+normal code.
 
-The basic premise, ideas, and art are done by Caigan.
-All the coding wizardry is done by Erdenshire.
+Source pack installation information:
 
--------------------------------------------
-USING THIS MOD
--------------------------------------------
+Standalone source installation
+==============================
 
-This mod is now under MIT License and is free to use for modpack makers. There are MANY issues though, as it is programmed on the side and specifically for the modpack, including strange thoughts and ideas from both of us. It is not structured with useability in mind for anyone but ourselves right now. This may change in the future.
+Step 1: Open your command-line and browse to the folder where you extracted the zip file.
 
-You cannot install this mod in any modpack you want currently, as it will crash on loading without the appropriate files.
+Step 2: Once you have a command window up in the folder that the downloaded material was placed, type:
 
-MODPACK MAKERS
-    You will need to create a the following folders and cfg files to get this to work
-        /config/ferretshinies/ (folder)
-        /config/ferretshinies/BlindBags.cfg (config file)
-            (OPTIONAL) Put the following as the first line in this config - TestBag:bagrarity_amazing
-        /config/ferretshinies/blindbags/ (folder)
-        (OPTIONAL) /config/ferretshinies/blindbags/TestBag.cfg
-            (OPTIONAL) Put the following as the first line in this config - minecraft:stone:0:1
+Windows: "gradlew setupDecompWorkspace"
+Linux/Mac OS: "./gradlew setupDecompWorkspace"
 
--------------------------------------------
-THE CONFIG FILE STRUCTURE
--------------------------------------------
+Step 3: After all that finished, you're left with a choice.
+For eclipse, run "gradlew eclipse" (./gradlew eclipse if you are on Mac/Linux)
 
---------BlindBags.cfg--------------
-This is for setting Blind Bag names and icons. 
+If you preffer to use IntelliJ, steps are a little different.
+1. Open IDEA, and import project.
+2. Select your build.gradle file and have it import.
+3. Once it's finished you must close IntelliJ and run the following command:
 
-Each line is a bag in the game, starting with MetaID 0 (so the first blind bag is ferretshinies:blindbag:0 in game). The format is as follows :
-    [BagName]:[bottom icon layer],[middle icon layer],[top icon layer]
-        EXAMPLE : TestBag:bagrarity_amazing,bagseed_precious
+"gradlew genIntellijRuns" (./gradlew genIntellijRuns if you are on Mac/Linux)
 
-You can have any number of [middle icon layer]s, but we haven't tested it with more than 5 layers at the most, so be warned.
+Step 4: The final step is to open Eclipse and switch your workspace to /eclipse/ (if you use IDEA, it should automatically start on your project)
 
-Capital letters denote a space in the bag name in-game, so this bag will show up as "Test Bag"
+If at any point you are missing libraries in your IDE, or you've run into problems you can run "gradlew --refresh-dependencies" to refresh the local cache. "gradlew clean" to reset everything {this does not effect your code} and then start the processs again.
 
--------Specific Bags--------------
-To set what each bag contains, make a cfg file in /config/ferretshinies/blindbags/ with the same name as in the BlindBags.cfg (in this case, TestBag.cfg)
+Should it still not work, 
+Refer to #ForgeGradle on EsperNet for more information about the gradle environment.
 
-Each line is a different item the bag can contain. The format is as follows : 
-    [mod]:[itemname]:[metaID]:[amount]:[{NBT Data(optional)}]
-        EXAMPLE 1 : minecraft:dirt:0:1
-            This will give the player a single Dirt block.
-        EXAMPLE 1 : minecraft:stone:0:1:{Name:"I Got a Rock..."}}
-            This will give the player a single Stone block named "I Got a Rock"
+Tip:
+If you do not care about seeing Minecraft's source code you can replace "setupDecompWorkspace" with one of the following:
+"setupDevWorkspace": Will patch, deobfusicated, and gather required assets to run minecraft, but will not generated human readable source code.
+"setupCIWorkspace": Same as Dev but will not download any assets. This is useful in build servers as it is the fastest because it does the least work.
 
-When a player Uses (Right Click) a bag in their hand, it will choose ONE line in the cfg and give the player that item.
+Tip:
+When using Decomp workspace, the Minecraft source code is NOT added to your workspace in a editable way. Minecraft is treated like a normal Library. Sources are there for documentation and research purposes and usually can be accessed under the 'referenced libraries' section of your IDE.
 
-The mod has no built-in way in game to copy the information from your inventory. I suggest using Starting Inventory, and with some clever use of Notepad++ macros you can easily convert it into a blind bag config file.
+Forge source installation
+=========================
+MinecraftForge ships with this code and installs it as part of the forge
+installation process, no further action is required on your part.
 
--------------------------------------------
-MORE INSTRUCTIONS FORTHCOMING
--------------------------------------------
+LexManos' Install Video
+=======================
+https://www.youtube.com/watch?v=8VEdtQLuLO0&feature=youtu.be
 
-I just needed something here for now. I'll explain how to add image files, icons, etc later.
-
--------------------------------------------
-LICENSE
--------------------------------------------
-
-MIT License, just ask that you give credit to Caigan and Erdenshire
+For more details update more often refer to the Forge Forums:
+http://www.minecraftforge.net/forum/index.php/topic,14048.0.html
